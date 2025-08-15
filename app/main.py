@@ -2,7 +2,6 @@ import os
 
 import requests
 from dotenv import load_dotenv
-
 from models import CryptoApiResponse, SimplifiedCryptoAsset
 
 load_dotenv()
@@ -13,24 +12,31 @@ API_ENDPOINT = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/lat
 
 def fetch_top_cryptos(limit: int = 10) -> CryptoApiResponse | None:
     """
-    Fetch the top cryptocurrencies by market capitalization from CoinMarketCap API.
+    Fetch the top cryptocurrencies by market capitalization
+    from CoinMarketCap API.
 
     Args:
-        limit (int, optional): The number of cryptocurrencies to retrieve. Defaults to 10.
+        limit (int, optional): The number of cryptocurrencies to retrieve.
+        Defaults to 10.
 
     Returns:
-        CryptoApiResponse or None: TypedDict with API response data if successful, or None if an error occurs.
+        CryptoApiResponse or None: TypedDict with API response data
+        if successful, or None if an error occurs.
 
     Raises:
-        ValueError: If the CoinMarketCap API key is not set in the environment variable COIN_MARKET_CAP_API_KEY.
+        ValueError: If the CoinMarketCap API key is not set in the
+        environment variable COIN_MARKET_CAP_API_KEY.
 
     Notes:
-        - Requires a valid CoinMarketCap API key set in the environment variable 'COIN_MARKET_CAP_API_KEY'.
-        - Handles network and request exceptions gracefully, printing an error message and returning None.
+        - Requires a valid CoinMarketCap API key set in the
+        environment variable 'COIN_MARKET_CAP_API_KEY'.
+        - Handles network and request exceptions gracefully,
+        printing an error message and returning None.
     """
     if not API_KEY:
         raise ValueError(
-            "API key for CoinMarketCap is not set. Please set the COIN_MARKET_CAP_API_KEY environment variable."
+            "API key for CoinMarketCap is not set. "
+            "Please set the COIN_MARKET_CAP_API_KEY environment variable."
         )
 
     try:
@@ -60,10 +66,12 @@ def parse_crypto_data(json_response: CryptoApiResponse) -> list[SimplifiedCrypto
     Parse the cryptocurrency data from the API response.
 
     Args:
-        json_response (CryptoApiResponse): The JSON response from the CoinMarketCap API.
+        json_response (CryptoApiResponse): The JSON response
+        from the CoinMarketCap API.
 
     Returns:
-        list[SimplifiedCryptoAsset]: List of simplified cryptocurrency assets with name, symbol, and price in USD.
+        list[SimplifiedCryptoAsset]: List of simplified cryptocurrency assets
+        with name, symbol, and price in USD.
     """
     return [
         {

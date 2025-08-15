@@ -9,6 +9,7 @@ requests = "==2.32.4"
 python-dotenv = "==1.1.1"
 
 [dev-packages]
+pre-commit = "==4.3.0"
 
 [requires]
 python_version = "3.12"
