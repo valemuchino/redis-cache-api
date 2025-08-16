@@ -4,7 +4,7 @@ import redis
 
 from app.models.crypto_models import SimplifiedCryptoAsset
 
-r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+r = redis.Redis(host="redis", port=6379, decode_responses=True)
 
 
 def set_cache(key: str, data: dict[str, SimplifiedCryptoAsset], ttl: int = 30) -> None:
