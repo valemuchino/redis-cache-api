@@ -11,14 +11,13 @@ API_KEY: str | None = os.getenv("COIN_MARKET_CAP_API_KEY")
 API_ENDPOINT = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
 
 
-def fetch_top_cryptos(limit: int = 10) -> CryptoApiResponse | None:
+def _fetch_top_cryptos(limit: int) -> CryptoApiResponse | None:
     """
     Fetch the top cryptocurrencies by market capitalization
     from CoinMarketCap API.
 
     Args:
-        limit (int, optional): The number of cryptocurrencies to retrieve.
-        Defaults to 10.
+        limit (int): The number of cryptocurrencies to retrieve.
 
     Returns:
         CryptoApiResponse or None: TypedDict with API response data
@@ -62,9 +61,9 @@ def fetch_top_cryptos(limit: int = 10) -> CryptoApiResponse | None:
         print(f"An error occurred while fetching data: {e}")
 
 
-def parse_crypto_data(
+def _parse_crypto_data(
     json_response: CryptoApiResponse,
-) -> dict[int, SimplifiedCryptoAsset]:
+) -> dict[str, SimplifiedCryptoAsset]:
     """
     Parse the cryptocurrency data from the API response.
 
@@ -77,8 +76,7 @@ def parse_crypto_data(
         with name, symbol, and price in USD.
     """
     return {
-        idx
-        + 1: {
+        str(idx + 1): {
             "name": coin["name"],
             "symbol": coin["symbol"],
             "usd_price": round(coin["quote"]["USD"]["price"], 2),
@@ -87,6 +85,18 @@ def parse_crypto_data(
     }
 
 
-response = fetch_top_cryptos()
-if response:
-    print(response)
+def get_parsed_crypto_data(limit: int = 10) -> dict[str, SimplifiedCryptoAsset] | None:
+    """
+    Retrieve and parse the top cryptocurrencies from the CoinMarketCap API.
+
+    Args:
+        limit (int, optional): The number of cryptocurrencies to retrieve.
+        Defaults to 10.
+
+    Returns:
+        dict[str, SimplifiedCryptoAsset] or None: Dictionary where keys
+        are rankings (as strings) and values are simplified
+        crypto asset data (name, symbol, usd_price). Returns None if the API call fails.
+    """
+    response = _fetch_top_cryptos(limit=limit)
+    return _parse_crypto_data(response) if response else None
